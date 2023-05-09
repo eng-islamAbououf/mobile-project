@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_project/Controllers/sign_up_controller.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -9,37 +10,18 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _companyNameController = TextEditingController();
-  final _contactPersonNameController = TextEditingController();
-  final _contactPersonPhoneNumberController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _companyAddressController = TextEditingController();
-  final _companyLocationController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  String _companyIndustry = 'Industry 1';
-  String _companySize = 'Micro';
 
-  List<String> _companyIndustryList = [
+  final SignUpController _controller = SignUpController() ;
+
+  // provider
+  List<String> _selectedIndustries = [];
+  String _companySize = 'Micro';
+  final List<String> _companyIndustryList = [
     'Industry 1',
     'Industry 2',
     'Industry 3',
     'Industry 4',
   ];
-
-  @override
-  void dispose() {
-    _companyNameController.dispose();
-    _contactPersonNameController.dispose();
-    _contactPersonPhoneNumberController.dispose();
-    _emailController.dispose();
-    _companyAddressController.dispose();
-    _companyLocationController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +56,10 @@ class _SignupScreenState extends State<SignupScreen> {
         Column(
           children: [
             SizedBox(
-              height: height * 0.05,
+              height: height * 0.1,
             ),
             Container(
+              height: height*0.8,
               decoration: const BoxDecoration(
                 color: Color(0x80ffffff),
                 borderRadius: BorderRadius.only(
@@ -84,193 +67,230 @@ class _SignupScreenState extends State<SignupScreen> {
                   topRight: Radius.circular(45),
                 ),
               ),
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SignUpFormField(
-                              txt: 'Company Name',
-                              controller: _companyNameController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Company name is required';
-                                }
-                                return null;
-                              }
-                              ),
-                          const SizedBox(height: 16.0),
-                          SignUpFormField(
-                              txt: 'Contact Person Name',
-                              controller: _contactPersonNameController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Contact person name is required';
-                                }
-                                return null;
-                              },
-                          ),
-                          const SizedBox(height: 16.0),
-                          const Text('Company Industry'),
-                          Wrap(
-                            children: _companyIndustryList
-                                .map((industry) => CheckboxListTile(
-                                      title: Text(industry),
-                                      value: _companyIndustry == industry,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _companyIndustry =
-                                              value == true ? industry : '';
-                                        });
-                                      },
-                                    ))
-                                .toList(),
-                          ),
-                          TextFormField(
-                            controller: _contactPersonPhoneNumberController,
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              labelText: 'Phone Number',
-                              hintText: 'Enter your phone number',
-                            ),
-                            validator: (value) {
-                              final phoneRegex = RegExp(r'^\d{10}$');
-                              if (value == null || value.isEmpty) {
-                                return 'Phone number is required';
-                              } else if (!phoneRegex.hasMatch(value)) {
-                                return 'Phone number is not valid';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'Enter your email address',
-                            ),
-                            validator: (value) {
-                              final emailRegex =
-                                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                              if (value == null || value.isEmpty) {
-                                return 'Email is required';
-                              } else if (!emailRegex.hasMatch(value)) {
-                                return 'Email is not valid';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _companyAddressController,
-                            decoration: const InputDecoration(
-                              labelText: 'Company Address',
-                              hintText: 'Enter your company address',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Company address is required';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _companyLocationController,
-                            decoration: const InputDecoration(
-                              labelText: 'Company Location',
-                              hintText: 'Enter your company location',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Company location is required';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16.0),
-                          const Text('Company Size'),
-                          // DropdownButtonFormField(
-                          //   value: _companySize,
-                          //   items: const [
-                          //     DropdownMenuItem(
-                          //       value: 'Micro',
-                          //       child: Text('Micro'),
-                          //     ),
-                          //     DropdownMenuItem(
-                          //       value: 'Small',
-                          //       child: Text('Small'),
-                          //     ),
-                          //     DropdownMenuItem(
-                          //       value: 'Mini',
-                          //       child: Text('Mini'),
-                          //     ),
-                          //     DropdownMenuItem(
-                          //       value: 'Large',
-                          //       child: Text('Large'),
-                          //     ),
-                          //   ],
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       _companySize = value.toString();
-                          //     });
-                          //   },
-                          // ),
-                          // TextFormField(
-                          //   controller: _passwordController,
-                          //   obscureText: true,
-                          //   decoration: const InputDecoration(
-                          //     labelText: 'Password',
-                          //     hintText: 'Enter your password',
-                          //   ),
-                          //   validator: (value) {
-                          //     if (value == null || value.isEmpty) {
-                          //       return 'Password is required';
-                          //     } else if (value.length < 8) {
-                          //       return 'Password must be at least 8 characters';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-                          // TextFormField(
-                          //   controller: _confirmPasswordController,
-                          //   obscureText: true,
-                          //   decoration: const InputDecoration(
-                          //     labelText: 'Confirm Password',
-                          //     hintText: 'Re-enter your password',
-                          //   ),
-                          //   validator: (value) {
-                          //     if (value == null || value.isEmpty) {
-                          //       return 'Confirm password is required';
-                          //     } else if (value.length < 8) {
-                          //       return 'Confirm password must be at least 8 characters';
-                          //     } else if (value != _passwordController.text) {
-                          //       return 'Confirm password must match password';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-                          // const SizedBox(height: 16.0),
-                          // ElevatedButton(
-                          //   onPressed: () {
-                          //     if (_formKey.currentState!.validate()) {
-                          //       _formKey.currentState!.save();
-                          //       // Perform sign up operation here
-                          //       print('Signup successful');
-                          //     } else {
-                          //       print('Signup failed');
-                          //     }
-                          //   },
-                          //   child: const Text('Sign Up'),
-                          // ),
-                        ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 25,),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                    ),
+                    child: Text("Register",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10,),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Form(
+                          key: _controller.formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SignUpFormField(
+                                  txt: 'Company Name',
+                                  controller: _controller.companyNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Company name is required';
+                                    }
+                                    return null;
+                                  }
+                                  ),
+                              const SizedBox(height: 16.0),
+                              SignUpFormField(
+                                  txt: 'Contact Person Name',
+                                  controller: _controller.contactPersonNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Contact person name is required';
+                                    }
+                                    return null;
+                                  },
+                              ),
+                              const SizedBox(height: 16.0),
+                              const Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text('Company Industry',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Wrap(
+                                children: _companyIndustryList
+                                    .map((industry) => CheckboxListTile(
+                                  title: Text(industry),
+                                  value: _selectedIndustries.contains(industry),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value == true) {
+                                        _selectedIndustries.add(industry);
+                                      } else {
+                                        _selectedIndustries.remove(industry);
+                                      }
+                                    });
+                                  },
+                                ))
+                                    .toList(),
+                              ),
+                              SignUpFormField(
+                                controller: _controller.contactPersonPhoneNumberController,
+                                keyboardType: TextInputType.phone,
+                                txt: 'Phone Number',
+                                validator: (value) {
+                                  final phoneRegex = RegExp(r'^\d{10}$');
+                                  if (value == null || value.isEmpty) {
+                                    return 'Phone number is required';
+                                  } else if (!phoneRegex.hasMatch(value)) {
+                                    return 'Phone number is not valid';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16.0),
+                              SignUpFormField(
+                                controller: _controller.emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                txt: 'Email',
+                                validator: (value) {
+                                  final emailRegex =
+                                      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                                  if (value == null || value.isEmpty) {
+                                    return 'Email is required';
+                                  } else if (!emailRegex.hasMatch(value)) {
+                                    return 'Email is not valid';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16.0),
+                              SignUpFormField(
+                                controller: _controller.companyAddressController,
+                                txt: 'Company Address',
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Company address is required';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16.0),
+                              const Text('Company Size',                                  style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                              const SizedBox(height: 10.0),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: Color(0xb3ffffff),
+                                ),
+                                child: DropdownButtonFormField(
+                                  value: _companySize,
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'Micro',
+                                      child: Text('Micro'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'Small',
+                                      child: Text('Small'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'Mini',
+                                      child: Text('Mini'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'Large',
+                                      child: Text('Large'),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _companySize = value.toString();
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                                    hintText: 'Company Size',
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              SignUpFormField(
+                                txt: 'Password',
+                                controller: _controller.passwordController,
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Password is required';
+                                  } else if (value.length < 8) {
+                                    return 'Password must be at least 8 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16.0),
+                              SignUpFormField(
+                                txt: 'Confirm Password',
+                                controller: _controller.confirmPasswordController,
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Confirm password is required';
+                                  } else if (value.length < 8) {
+                                    return 'Confirm password must be at least 8 characters';
+                                  } else if (value != _controller.passwordController.text) {
+                                    return 'Confirm password must match password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16.0),
+                              Container(
+                                width: width*0.92,
+                                height: height*0.06,
+                                margin: EdgeInsets.only(
+                                  left: width*0.01,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff47cec7),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    if (_controller.formKey.currentState!.validate()) {
+                                      _controller.formKey.currentState!.save();
+                                      // Perform sign up operation here
+                                      print('Signup successful');
+                                    } else {
+                                      print('Signup failed');
+                                    }
+                                  },
+                                  child: const Text('Create Account',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -278,24 +298,4 @@ class _SignupScreenState extends State<SignupScreen> {
       ]),
     ));
   }
-}
-
-
-class _CurvedClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final radius = 25.0;
-    path.lineTo(0, size.height - radius);
-    path.quadraticBezierTo(0, size.height, radius, size.height);
-    path.lineTo(size.width - radius, size.height);
-    path.quadraticBezierTo(size.width, size.height, size.width, size.height - radius);
-    path.lineTo(size.width, 0);
-    path.lineTo(0, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
