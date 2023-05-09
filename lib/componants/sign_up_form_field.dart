@@ -14,6 +14,7 @@ class SignUpFormField extends StatelessWidget {
   var validator , keyboardType;
   @override
   Widget build(BuildContext context) {
+    print("islam") ;
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType??TextInputType.text,
