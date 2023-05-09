@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_project/Controllers/sign_up_controller.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
+import 'package:mobile_project/provider/sign_up_provider.dart';
+import 'package:provider/provider.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
-
-  @override
-  _SignupScreenState createState() => _SignupScreenState();
-}
-
-class _SignupScreenState extends State<SignupScreen> {
+class SignupScreen extends StatelessWidget {
+  SignupScreen({Key? key}) : super(key: key);
 
   final SignUpController _controller = SignUpController() ;
 
   // provider
-  List<String> _selectedIndustries = [];
-  String _companySize = 'Micro';
   final List<String> _companyIndustryList = [
     'Industry 1',
     'Industry 2',
@@ -27,6 +21,9 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    var provider = Provider.of<SignUpProvider>(context) ;
+
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
@@ -128,15 +125,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   children: _companyIndustryList
                                       .map((industry) => CheckboxListTile(
                                     title: Text(industry),
-                                    value: _selectedIndustries.contains(industry),
+                                    value: provider.selectedIndustries.contains(industry),
                                     onChanged: (value) {
-                                      setState(() {
-                                        if (value == true) {
-                                          _selectedIndustries.add(industry);
-                                        } else {
-                                          _selectedIndustries.remove(industry);
-                                        }
-                                      });
+                                      provider.setIndustry(value, industry) ;
                                     },
                                   ))
                                       .toList(),
@@ -194,7 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     color: Color(0xb3ffffff),
                                   ),
                                   child: DropdownButtonFormField(
-                                    value: _companySize,
+                                    value: provider.companySize,
                                     items: const [
                                       DropdownMenuItem(
                                         value: 'Micro',
@@ -214,9 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                                     ],
                                     onChanged: (value) {
-                                      setState(() {
-                                        _companySize = value.toString();
-                                      });
+                                        provider.setCompanySize(value) ;
                                     },
                                     decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
