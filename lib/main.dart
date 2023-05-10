@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_project/view/sign_in.dart';
 import 'package:mobile_project/view/sign_up.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( SignInScreen());
 }
 
 class MyApp extends StatelessWidget {
