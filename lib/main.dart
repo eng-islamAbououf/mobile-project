@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_project/view/sign_in.dart';
+import 'package:mobile_project/provider/sign_up_provider.dart';
 import 'package:mobile_project/view/sign_up.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp( SignInScreen());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,9 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignupScreen(),
+      home: ChangeNotifierProvider(
+        create: (_)=> SignUpProvider(),
+          child: SignupScreen()),
     );
   }
 }
