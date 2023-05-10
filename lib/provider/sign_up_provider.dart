@@ -12,7 +12,7 @@ class SignUpProvider with ChangeNotifier{
     companySize = com ;
     notifyListeners();
   }
-  setIndustry(var value , String ind){
+    setIndustry(var value , String ind){
     if(value) _selectedIndustries.add(ind) ;
     else _selectedIndustries.remove(ind);
     notifyListeners();
