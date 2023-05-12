@@ -15,7 +15,7 @@ class AuthValidator{
   }
 
   String? validateContactPersonPhoneNumber(String? value){
-    final phoneRegex = RegExp(r'^\d{10}$');
+    final phoneRegex = RegExp(r'^\d{11}$');
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     } else if (!phoneRegex.hasMatch(value)) {

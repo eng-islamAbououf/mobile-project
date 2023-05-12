@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_project/Validators/sign_up_validator.dart';
+import 'package:mobile_project/api.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/view/sign_up.dart';
 
 import '../Controllers/sign_in_controller.dart';
+import 'home_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -79,11 +81,30 @@ class SignInScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: MaterialButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_controller.formKey.currentState!
                                           .validate()) {
-                                        _controller.formKey.currentState!
-                                            .save();
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          },
+                                        );
+
+                                        var response = await Api().login(_controller.emailController.text,
+                                        _controller.passwordController.text
+                                        ) ;
+                                        Navigator.of(context).pop();
+                                        if(response['status']){
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(builder: (context) =>
+                                                HomeScreen()
+                                            )
+                                          );
+                                        }
                                         // Perform sign in operation here
                                         print('Signup successful');
                                       } else {

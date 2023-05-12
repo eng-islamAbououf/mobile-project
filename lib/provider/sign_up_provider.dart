@@ -4,17 +4,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class SignUpProvider with ChangeNotifier{
 
 
-  List<String> _selectedIndustries = [];
+  final List<String> _selectedIndustries = [];
   final Set<Marker> markers = {};
   String companySize = 'Micro';
-
+  double lang = 0 , lat = 0;
   List<String> get selectedIndustries => _selectedIndustries;
 
-  setCompanySize(var com){
+  setCompanySize(com){
     companySize = com ;
     notifyListeners();
   }
-  setIndustry(var value , String ind){
+  setIndustry(value , String ind){
     if(value) {
       _selectedIndustries.add(ind) ;
     } else {
@@ -22,16 +22,17 @@ class SignUpProvider with ChangeNotifier{
     }
     notifyListeners();
   }
-
-  changeMarker(pos){
+  changeMarker(LatLng pos){
 
     markers.clear();
     markers.add(
       Marker(
-        markerId: MarkerId('new-position'),
+        markerId: const MarkerId('marker'),
         position: pos,
       ),
     );
+    lang = pos.longitude;
+    lat = pos.latitude;
     notifyListeners();
   }
 }
