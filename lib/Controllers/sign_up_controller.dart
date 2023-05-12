@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SignUpController{
   final _formKey = GlobalKey<FormState>();
@@ -10,6 +13,7 @@ class SignUpController{
   final _companyLocationController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final Completer<GoogleMapController> _mapController = Completer();
 
   get formKey => _formKey;
 
@@ -28,4 +32,17 @@ class SignUpController{
   get contactPersonNameController => _contactPersonNameController;
 
   get companyNameController => _companyNameController;
+
+  String? validateConfirmPassword(String? value){
+    if (value == null || value.isEmpty) {
+      return 'Confirm password is required';
+    } else if (value.length < 8) {
+      return 'Confirm password must be at least 8 characters';
+    } else if (value != _passwordController.text) {
+      return 'Confirm password must match password';
+    }
+    return null;
+  }
+
+  Completer<GoogleMapController> get mapController => _mapController;
 }
