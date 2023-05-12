@@ -1,76 +1,69 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:mobile_project/api.dart';
-import 'package:mobile_project/model/company_model.dart';
+import 'package:mobile_project/Controllers/edit_profile_controller.dart';
+import 'package:mobile_project/models/company_model_response.dart';
+import 'package:mobile_project/repos/profile_services.dart';
+
+import '../repos/api_status.dart';
 
 class EditProfileProvider with ChangeNotifier{
 
-  final CompanyModel _companyModel = CompanyModel(
-      'swsws',
-      'abdo',
-      '01118210115',
-      'abdelrahmn@gmail.com',
-      'sheko', 'Large',
-      '123456789', ['Industry1'], null , 0 , 0);
+  late CompanyModelResponse _companyModel;
+  bool _loading = false;
+  bool _success = false;
+  String? errorMsg;
+  bool get loading => _loading;
+  EditProfileController _controller = EditProfileController();
+  CompanyModelResponse get companyModel => _companyModel;
 
-
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _contactNameController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _password = TextEditingController();
-  final _addressController = TextEditingController();
-
-  CompanyModel get companyModel => _companyModel;
-
-  get formKey => _formKey;
-
-  init(){
-    _nameController.text = companyModel.companyName!;
-    _contactNameController.text = companyModel.contactPersonName!;
-    _phoneNumberController.text = companyModel.phoneNumber!;
-    _emailController.text = companyModel.email!;
-    _password.text = companyModel.password!;
-    _addressController.text = companyModel.address!;
+  init(CompanyModelResponse model){
+    _companyModel = model;
+    _controller.nameController.text = _companyModel.company.companyName;
+    _controller.contactNameController.text = _companyModel.company.contactPersonName;
+    _controller.phoneNumberController.text = _companyModel.company.companyPhone;
+    _controller.emailController.text = _companyModel.company.email;
+    _controller.password.text = _companyModel.company.password??' ';
+    _controller.addressController.text = _companyModel.company.companyAddress;
   }
   setImage(var image) async {
-    _companyModel.image = image ;
+    _companyModel.company.image = image ;
     notifyListeners();
   }
 
   setSize(var size){
-    _companyModel.size = size;
+    _companyModel.company.companySize = size;
     notifyListeners();
   }
 
   setIndustry(value, industry){
     if(value) {
-      companyModel.industry!.add(industry) ;
+      companyModel.company.companyIndustry.add(industry) ;
     } else {
-      if(companyModel.industry!.length>1) {
-        companyModel.industry!.remove(industry);
+      if(companyModel.company.companyIndustry.length>1) {
+        companyModel.company.companyIndustry.remove(industry);
       }
     }
     notifyListeners();
   }
 
-  saveChanges() async {
-
-    var response = await Api().editCompanyProfile(_companyModel) ;
-    print(response) ;
+  updateProfile() async {
+    companyModel.company.password = _controller.password.text;
+    setLoading(true) ;
+    var response = await ProfileServices().updateProfile(companyModel) ;
+    setLoading(false) ;
+    if(response is Success){
+      _success = true;
+    }else {
+      errorMsg = 'Some Error' ;
+    }
+    notifyListeners();
   }
 
-  get nameController => _nameController;
+  bool get success => _success;
 
-  get contactNameController => _contactNameController;
+  void setLoading(bool val) {
+    _loading = val;
+    notifyListeners();
+  }
 
-  get phoneNumberController => _phoneNumberController;
-
-  get emailController => _emailController;
-
-  get password => _password;
-
-  get addressController => _addressController;
+  EditProfileController get controller => _controller;
 }
