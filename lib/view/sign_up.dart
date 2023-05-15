@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_project/Controllers/sign_up_controller.dart';
 import 'package:mobile_project/Validators/sign_up_validator.dart';
+import 'package:mobile_project/componants/custom_app_bar.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/provider/sign_up_provider.dart';
@@ -50,21 +51,7 @@ class SignupScreen extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          SizedBox(
-            height: height * 0.1,
-            child: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              // Other AppBar properties, such as title or actions, can be added here
-            ),
-          ),
+          CustomAppBar(height: height, title: ''),
           Column(
             children: [
               Container(

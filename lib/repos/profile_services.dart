@@ -13,7 +13,6 @@ class ProfileServices{
     String url = '$BASE/update/';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     CompanyModel model = companyModel.company;
-    print(model);
     request.headers['Authorization'] = 'Bearer ${companyModel.token}'; // Add token to headers
     request.headers['Content-Type'] = 'application/json'; // Add token to headers
     request.fields['company_name'] = model.companyName;
@@ -37,7 +36,7 @@ class ProfileServices{
           response: '',
         );
       }
-      return Failure(code: INVALID_RESPONSE, errorResponse: "Invalid Email or password");
+      return Failure(code: INVALID_RESPONSE, errorResponse: "Invalid Data");
     } on HttpException{
       return Failure(code: NO_INTERNE, errorResponse: "No Internet");
     }on FormatException{
