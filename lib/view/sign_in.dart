@@ -4,6 +4,7 @@ import 'package:mobile_project/Validators/sign_up_validator.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/view/edit_profile.dart';
+import 'package:mobile_project/view/home_screen.dart';
 import 'package:mobile_project/view/sign_up.dart';
 import 'package:provider/provider.dart';
 
@@ -98,7 +99,7 @@ class SignInScreen extends StatelessWidget {
                                     await provider.signIn();
                                     if(provider.companyModel!=null){
                                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)
-                                      => EditProfileScreen(model: provider.companyModel!)
+                                      => const HomeScreen()
                                       ));
                                     }else {
                                       showDialog(context: context, builder: (_) => FailureDialog(errorMsg: provider.errorMsg)) ;

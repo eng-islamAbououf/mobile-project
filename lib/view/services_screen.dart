@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_project/componants/service_item_view.dart';
 import 'package:mobile_project/provider/home_provider.dart';
+import 'package:mobile_project/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class ServicesScreen extends StatelessWidget {
-  ServicesScreen({Key? key ,required this.provider}) : super(key: key);
+  ServicesScreen({Key? key}) : super(key: key);
 
-  HomeProvider provider;
   @override
   Widget build(BuildContext context) {
-    double height  = MediaQuery.of(context).size.height;
+
+    var provider = Provider.of<HomeProvider>(context);
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: TextField(
-            controller: provider.searchController,
             onChanged: (val){
               provider.setSearchText(val);
             },
@@ -28,12 +29,17 @@ class ServicesScreen extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: height*0.65,
+        Expanded(
           child: ListView.builder(
             itemCount: provider.filtered.length,
             itemBuilder: (context, index) {
-              return ServiceItemView(model: provider.filtered[index]);
+              return InkWell(
+                onTap: (){
+                  provider.setTappedIndex(index);
+                  provider.setIndex(SERVICE_DETAILS_PAGE);
+                },
+                  child: ServiceItemView(model: provider.filtered[index])
+              );
             },
           ),
         ),

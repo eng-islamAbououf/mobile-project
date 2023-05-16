@@ -10,41 +10,45 @@ class ServiceItemView extends StatelessWidget {
   ServiceItemModel model;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.network(
-            model.image,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      elevation: 0, // Removes the shadow
+      color: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: const EdgeInsets.only(
+          left: 10,
+          top: 10
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              model.service.name.toUpperCase(),
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            Row(
               children: [
-                Text(
-                  model.title,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    SizedBox(
-                        height: 25,
-                      width: 25,
-                        child: Image.asset("assets/icons/distance.png"),
+                const SizedBox(
+                    height: 25,
+                  width: 25,
+                    child: Image(
+                      image: AssetImage("assets/images/distance.png"),
+                      fit: BoxFit.cover,
                     ),
-                    Text(
-                      ' ${model.distance.toStringAsFixed(2)} km',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
                 ),
-                const SizedBox(height: 10),
+                Expanded(
+                  child: Text(
+                    ' ${model.distance.toStringAsFixed(2)} km',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
@@ -54,14 +58,14 @@ class ServiceItemView extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Future<void> _openInMaps() async {
-    final url = 'https://www.google.com/maps/dir/?api=1&destination=${model.latitude},${model.longitude}';
+    final url = 'https://www.google.com/maps/dir/?api=1&destination=${model.company.lat},${model.company.long}';
     if (await canLaunchUrlString(url)) {
       await launch(url);
     } else {

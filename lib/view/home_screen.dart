@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_project/componants/custom_app_bar.dart';
 import 'package:mobile_project/provider/home_provider.dart';
+import 'package:mobile_project/utils/constants.dart';
+import 'package:mobile_project/view/edit_profile.dart';
 import 'package:mobile_project/view/fav_screen.dart';
 import 'package:mobile_project/view/profile_screen.dart';
+import 'package:mobile_project/view/service_details_screen.dart';
 import 'package:mobile_project/view/services_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'add_service_screen.dart';
+import 'search_company_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -44,23 +48,26 @@ class HomeScreen extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.home_outlined,color: Colors.white,),
-                onPressed: () => provider.setIndex(0),
+                onPressed: () => provider.setIndex(HOME_PAGE),
               ),
               IconButton(
                 icon: const Icon(Icons.search,color: Colors.white,),
-                onPressed: () => provider.setIndex(0),
+                onPressed: () => provider.setIndex(SEARCH_PAGE),
               ),
               IconButton(
                 icon: const Icon(Icons.add,color: Colors.white,),
-                onPressed: () => provider.setIndex(1),
+                onPressed: () => provider.setIndex(ADD_SERVICE_PAGE),
               ),
               IconButton(
                 icon: const Icon(Icons.favorite_border,color: Colors.white,),
-                onPressed: () => provider.setIndex(2),
+                onPressed: () => provider.setIndex(FAVOURITE_PAGE),
               ),
               IconButton(
                 icon: const Icon(Icons.person_2_outlined , color: Colors.white,),
-                onPressed: () => provider.setIndex(3),
+                onPressed: (){
+                  provider.setCurProfile(true);
+                  provider.setIndex(PROFILE_PAGE);
+                },
               ),
             ],
           ),
@@ -71,7 +78,7 @@ class HomeScreen extends StatelessWidget {
         height: 75,
         child: FloatingActionButton(
           onPressed: () {
-            provider.setIndex(1);
+            provider.setIndex(ADD_SERVICE_PAGE);
           },
           backgroundColor: Color(0xffF2E8FD),
           elevation: 20.0,
@@ -84,10 +91,21 @@ class HomeScreen extends StatelessWidget {
 
   _ui(HomeProvider provider ,height,context){
     final _curWidget = [
-      ServicesScreen(provider:provider,),
-      AddServiceScreen(provider: provider),
-      FavouriteScreen(provider: provider),
+      ServicesScreen(),
+      const SearchCompanyScreen(),
+      AddServiceScreen(),
+      FavouriteScreen(),
       ProfileScreen(),
+      ServiceDetailsScreen(),
+    ];
+
+    final curWidgetTitle = [
+      'Services',
+      'Search Services',
+      'Add Service',
+      'Favourite Services',
+      'Profile',
+      'Service Details'
     ];
     if(provider.loading) {
       return const Center(child: CircularProgressIndicator(),);
@@ -95,8 +113,18 @@ class HomeScreen extends StatelessWidget {
 
     return Column(
       children: [
-        CustomAppBar(height: height, title: "Services"),
-        _curWidget[provider.index],
+        CustomAppBar(height: height, title: curWidgetTitle[provider.index],
+        action: provider.curProfile&&provider.index==PROFILE_PAGE ?
+            IconButton(onPressed: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => EditProfileScreen())
+              );
+            }, icon:const Icon(Icons.settings , color: Colors.white,) ): null,
+        ),
+        SizedBox(
+          height: height*0.77,
+          child: _curWidget[provider.index],
+        )
       ],
     );
   }

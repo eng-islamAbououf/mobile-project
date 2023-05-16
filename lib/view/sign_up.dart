@@ -7,6 +7,7 @@ import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/provider/sign_up_provider.dart';
 import 'package:mobile_project/view/edit_profile.dart';
+import 'package:mobile_project/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -29,6 +30,7 @@ class SignupScreen extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     var provider = Provider.of<SignUpProvider>(context);
+    provider.init();
     _controller = provider.controller;
 
     return Scaffold(
@@ -140,8 +142,8 @@ class SignupScreen extends StatelessWidget {
                                     height: height * 0.5,
                                     child: GoogleMap(
                                       initialCameraPosition:
-                                      const CameraPosition(
-                                        target: LatLng(37.77483, -122.41942),
+                                      CameraPosition(
+                                        target: LatLng(provider.position!.latitude,provider.position!.longitude),
                                         zoom: 16,
                                       ),
                                       markers: provider.markers,
@@ -263,7 +265,7 @@ class SignupScreen extends StatelessWidget {
                                           if(provider.token!=null){
                                             Navigator.of(context).pushReplacement(
                                               MaterialPageRoute(builder: (context) =>
-                                                  EditProfileScreen(model: provider.companyModel!,)
+                                                  HomeScreen()
                                               )
                                             );
                                           }else {

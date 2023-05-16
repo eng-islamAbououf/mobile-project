@@ -12,7 +12,7 @@ class EditProfileProvider with ChangeNotifier{
   bool _success = false;
   String? errorMsg;
   bool get loading => _loading;
-  EditProfileController _controller = EditProfileController();
+  final EditProfileController _controller = EditProfileController();
   CompanyModelResponse get companyModel => _companyModel;
 
   init(CompanyModelResponse model){

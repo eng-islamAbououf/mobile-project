@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/componants/success_dialog.dart';
-import 'package:mobile_project/models/company_model.dart';
 import 'package:mobile_project/models/company_model_response.dart';
+import 'package:mobile_project/provider/home_provider.dart';
 import 'package:mobile_project/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +36,7 @@ class EditProfileScreen extends StatelessWidget {
     }
 
   }
-  CompanyModelResponse model;
-  EditProfileScreen({required this.model});
+  EditProfileScreen({super.key});
   final List<String> _companyIndustryList = [
     'Industry1',
     'Industry2',
@@ -48,7 +47,7 @@ class EditProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<EditProfileProvider>(context) ;
-    provider.init(model);
+    provider.init(CompanyModelResponse.fromCompany(Provider.of<HomeProvider>(context).company!));
     final validator = AuthValidator();
     return Scaffold(
         body: Container(
@@ -65,7 +64,7 @@ class EditProfileScreen extends StatelessWidget {
   }
 
   _ui(EditProfileProvider provider, double height ,BuildContext context , AuthValidator validator){
-    if(provider.loading) return Center(child: CircularProgressIndicator(),);
+    if(provider.loading) return const Center(child: CircularProgressIndicator(),);
     return SafeArea(
       child: Column(
         children: [
@@ -91,88 +90,85 @@ class EditProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 Center(
-                  child: GestureDetector(
-                    onTap: (){},
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 75,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: provider.companyModel.company.image != null ? FileImage(provider.companyModel.company.image!) : null,
-                          child: provider.companyModel.company.image == null
-                              ? Image.asset('assets/images/man.png')
-                              : null,
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (curContext) {
-                                  return Dialog(
-                                    shape: RoundedRectangleBorder(
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 75,
+                        backgroundColor: Colors.grey[300],
+                        backgroundImage: provider.companyModel.company.image != null ? FileImage(provider.companyModel.company.image!) : null,
+                        child: provider.companyModel.company.image == null
+                            ? Image.asset('assets/images/buildings.png')
+                            : null,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (curContext) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20.0),
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.0),
+                                      color: Colors.white,
                                     ),
-                                    elevation: 0,
-                                    backgroundColor: Colors.transparent,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(20.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20.0),
-                                        color: Colors.white,
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            'Choose an option',
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                          'Choose an option',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          const SizedBox(height: 20.0),
-                                          ListTile(
-                                            leading: const Icon(Icons.camera_alt),
-                                            title: const Text('Take a photo'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              _pickImage(ImageSource.camera, provider, context);
-                                            },
-                                          ),
-                                          const SizedBox(height: 10.0),
-                                          const Divider(),
-                                          const SizedBox(height: 10.0),
-                                          ListTile(
-                                            leading: const Icon(Icons.image),
-                                            title: const Text('Choose from gallery'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              _pickImage(ImageSource.gallery, provider , context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                        const SizedBox(height: 20.0),
+                                        ListTile(
+                                          leading: const Icon(Icons.camera_alt),
+                                          title: const Text('Take a photo'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            _pickImage(ImageSource.camera, provider, context);
+                                          },
+                                        ),
+                                        const SizedBox(height: 10.0),
+                                        const Divider(),
+                                        const SizedBox(height: 10.0),
+                                        ListTile(
+                                          leading: const Icon(Icons.image),
+                                          title: const Text('Choose from gallery'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            _pickImage(ImageSource.gallery, provider , context);
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
-                              );
+                                  ),
+                                );
+                              },
+                            );
 
-                            },
-                            child: const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Color(0xff3ce1d9),
-                              child: Icon(
-                                Icons.add_a_photo_outlined,
-                                color: Colors.white,
-                              ),
+                          },
+                          child: const CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Color(0xff3ce1d9),
+                            child: Icon(
+                              Icons.add_a_photo_outlined,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(

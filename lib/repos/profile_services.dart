@@ -23,10 +23,11 @@ class ProfileServices{
     request.fields['company_size'] = model.companySize;
     request.fields['password'] = model.password!;
     request.fields['company_industry'] = model.companyIndustry.join(',');
-    request.fields['lang'] = '${model.lang}' ;
+    request.fields['long'] = '${model.long}' ;
     request.fields['lat'] = '${model.lat}' ;
-    if(model.image!=null)
+    if(model.image!=null) {
       request.files.add(await http.MultipartFile.fromPath('image', model.image!.path));
+    }
     print(request.fields) ;
     try {
       var response = await request.send();// Replace with your post data
