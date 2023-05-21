@@ -1,26 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_project/Controllers/sign_in_controller.dart';
 import 'package:mobile_project/Validators/sign_up_validator.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
-import 'package:mobile_project/view/edit_profile.dart';
 import 'package:mobile_project/view/home_screen.dart';
 import 'package:mobile_project/view/sign_up.dart';
 import 'package:provider/provider.dart';
 
-import '../Controllers/sign_in_controller.dart';
 import '../provider/sign_in_provider.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
-  var _controller = SignInController() ;
   final _validator = AuthValidator() ;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var provider = Provider.of<SignInProvider>(context) ;
-    _controller = provider.controller;
     return Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -34,6 +31,7 @@ class SignInScreen extends StatelessWidget {
       );
   }
   _ui(SignInProvider provider,height ,width , context){
+    SignInController controller = provider.controller;
     if(provider.loading)return const Center(child: CircularProgressIndicator(),);
 
     return SafeArea(
@@ -59,7 +57,7 @@ class SignInScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: SingleChildScrollView(
                       child: Form(
-                        key: _controller.formKey,
+                        key: controller.formKey,
                         child: Column(
                           children: [
                             SizedBox(height: height*0.04,),
@@ -74,13 +72,13 @@ class SignInScreen extends StatelessWidget {
                             SizedBox(height: height*0.04,),
 
                             SignUpFormField(
-                              txt: 'Email', controller: _controller.emailController,
+                              txt: 'Email', controller: controller.emailController,
                               validator: _validator.validateEmail,
                             ),
                             SizedBox(height: height*0.02,),
                             SignUpFormField(
                               obscureText: true,
-                              txt: 'Password', controller: _controller.passwordController,
+                              txt: 'Password', controller: controller.passwordController,
                               validator: _validator.validatePassword,
                             ),
                             SizedBox(height: height*0.02,),
@@ -93,7 +91,7 @@ class SignInScreen extends StatelessWidget {
                               ),
                               child: MaterialButton(
                                 onPressed: () async {
-                                  if (_controller.formKey.currentState!
+                                  if (controller.formKey.currentState!
                                       .validate()) {
 
                                     await provider.signIn();

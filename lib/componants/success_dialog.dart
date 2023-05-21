@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../view/home_screen.dart';
+
 class SuccessDialog extends StatelessWidget {
   SuccessDialog({Key? key , required this.msg}) : super(key: key);
   String msg;

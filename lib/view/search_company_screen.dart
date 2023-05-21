@@ -17,7 +17,7 @@ class SearchCompanyScreen extends StatelessWidget {
     var provider = Provider.of<HomeProvider>(context);
     double height = MediaQuery.of(context).size.height ;
     double width = MediaQuery.of(context).size.width ;
-    final Completer<GoogleMapController> _mapController = Completer();
+    final Completer<GoogleMapController> mapController = Completer();
 
     return Column(
       children: [
@@ -55,21 +55,21 @@ class SearchCompanyScreen extends StatelessWidget {
             ),
           ),
         ),
-        provider.mapView ? SizedBox(
+        provider.filteredCompany.isEmpty ? const Center(child: Text("No Such Companies")) : provider.mapView ? SizedBox(
           width: width,
           height: height * 0.632,
           child: GoogleMap(
             initialCameraPosition:
             CameraPosition(
              // target: LatLng(provider.position!.latitude,provider.position!.longitude),
-              target: provider.markers.first.position,
+              target: provider.markers.isEmpty ? const LatLng(0, 0) : provider.markers.first.position,
               zoom: 16,
             ),
             markers: provider.markers,
             onMapCreated:
                 (GoogleMapController controller) {
-              if(_mapController.isCompleted) {
-                _mapController
+              if(mapController.isCompleted) {
+                mapController
                     .complete(controller);
               }
             },

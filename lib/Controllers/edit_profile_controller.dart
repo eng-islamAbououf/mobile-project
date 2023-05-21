@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class EditProfileController{
 
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey();
   final _nameController = TextEditingController();
   final _contactNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();

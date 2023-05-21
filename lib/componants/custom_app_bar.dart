@@ -14,13 +14,13 @@ class CustomAppBar extends StatelessWidget {
       child: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.black,
+        //   ),
+        //   onPressed: () => Navigator.of(context).pop(),
+        // ),
         title: Text(title.toUpperCase() , style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold

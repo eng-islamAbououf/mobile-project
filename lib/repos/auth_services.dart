@@ -22,7 +22,7 @@ class AuthServices{
         }),
       );
 
-      print(response.body);
+      print(response.statusCode);
       if(response.statusCode==200){
         return Success(code: 200,
             response: companyResponseFromJson(response.body),
@@ -35,6 +35,7 @@ class AuthServices{
       return Failure(code: INVALID_FORMAT, errorResponse: "Invalid Format");
     }
     catch (e) {
+      print(e) ;
       return Failure(code: UNKNOWN, errorResponse: "Unknown Error");
     }
   }

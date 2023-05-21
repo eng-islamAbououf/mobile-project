@@ -17,9 +17,15 @@ class SignUpProvider with ChangeNotifier {
   Position? position;
   String? get token => _token;
 
+  SignUpProvider(){
+    init();
+  }
   init() async {
+    setLoading(true);
     position =await LocationServices().getCurrentPosition() ;
+    changeMarker(LatLng(position!.latitude, position!.longitude));
     notifyListeners();
+    setLoading(false) ;
   }
   bool get loading => _loading;
 

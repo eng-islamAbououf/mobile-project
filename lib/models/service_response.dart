@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mobile_project/models/service_item_model.dart';
+import 'package:mobile_project/utils/constants.dart';
 
 List<ServiceResponse> serviceFromJson(String str) => List<ServiceResponse>.from(json.decode(str).map((x) => ServiceResponse.fromJson(x)));
 
@@ -78,7 +79,7 @@ class Company {
     companyAddress: json["company_address"],
     lat: json["lat"],
     long: json["long"],
-    image: json["image"],
+    image: json["image"]==null ? null: File("${STORAGE}${json['image']}"),
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
     services: List<Service>.from(json["services"].map((x) => Service.fromJson(x))),

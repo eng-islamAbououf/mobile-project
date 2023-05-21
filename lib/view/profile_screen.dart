@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
     var company = provider.curProfile? provider.company : provider.filtered[provider.tappedIndex].company;
     double height = MediaQuery.of(context).size.height ;
     double width = MediaQuery.of(context).size.width ;
-    var distance = provider.filtered[provider.tappedIndex].distance;
+    var distance = provider.filtered!=null ? provider.filtered[provider.tappedIndex].distance : 0;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,15 +20,10 @@ class ProfileScreen extends StatelessWidget {
             child: Container(
               height: height*0.15,
               width: height*0.15,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: company.image != null
-                      ? AssetImage(company.image!.path)
-                      : const AssetImage(
-                          'assets/images/buildings.png'), // Replace with your desired background image path
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: company.image != null ? CircleAvatar(
+                radius: 35, // Adjust the radius according to your preference
+                backgroundImage: FileImage(company.image!),
+              ) : Image.asset('assets/images/buildings.png'),
             ),
           ),
           Padding(

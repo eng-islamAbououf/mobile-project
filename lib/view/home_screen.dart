@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => EditProfileScreen())
               );
-            }, icon:const Icon(Icons.settings , color: Colors.white,) ): null,
+            }, icon:const Icon(Icons.settings , color: Colors.black,) ): null,
         ),
         SizedBox(
           height: height*0.77,

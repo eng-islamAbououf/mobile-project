@@ -9,7 +9,7 @@ String companyResponseToJson(CompanyModelResponse data) => json.encode(data.toJs
 
 class CompanyModelResponse{
 
-  CompanyModel company;
+  Company company;
   String token;
 
   CompanyModelResponse({
@@ -18,13 +18,8 @@ class CompanyModelResponse{
   });
 
   factory CompanyModelResponse.fromJson(Map<String, dynamic> json) => CompanyModelResponse(
-    company: CompanyModel.fromJson(json["company"]),
+    company: Company.fromJson(json["company"]),
     token: json["token"],
-  );
-
-  factory CompanyModelResponse.fromCompany(Company company) => CompanyModelResponse(
-    company: CompanyModel.fromCompany(company),
-    token: "",
   );
 
   Map<String, dynamic> toJson() => {

@@ -5,8 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/componants/success_dialog.dart';
-import 'package:mobile_project/models/company_model_response.dart';
-import 'package:mobile_project/provider/home_provider.dart';
+import 'package:mobile_project/utils/constants.dart';
 import 'package:mobile_project/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -37,17 +36,11 @@ class EditProfileScreen extends StatelessWidget {
 
   }
   EditProfileScreen({super.key});
-  final List<String> _companyIndustryList = [
-    'Industry1',
-    'Industry2',
-    'Industry3',
-    'Industry4',
-  ];
+  final List<String> _companyIndustryList = INDUSTRIES ;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<EditProfileProvider>(context) ;
-    provider.init(CompanyModelResponse.fromCompany(Provider.of<HomeProvider>(context).company!));
     final validator = AuthValidator();
     return Scaffold(
         body: Container(
@@ -79,7 +72,7 @@ class EditProfileScreen extends StatelessWidget {
                   color: Colors.black,
                   size: 25,
                 ),
-                onPressed: () => Navigator.of(context).push(
+                onPressed: () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => HomeScreen()
                     )),
               ),
@@ -95,8 +88,8 @@ class EditProfileScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 75,
                         backgroundColor: Colors.grey[300],
-                        backgroundImage: provider.companyModel.company.image != null ? FileImage(provider.companyModel.company.image!) : null,
-                        child: provider.companyModel.company.image == null
+                        backgroundImage: provider.companyModel.image != null ? FileImage(provider.companyModel.image!) : null,
+                        child: provider.companyModel.image == null
                             ? Image.asset('assets/images/buildings.png')
                             : null,
                       ),
@@ -198,7 +191,7 @@ class EditProfileScreen extends StatelessWidget {
                                   .map((industry) => CheckboxListTile(
                                 activeColor: const Color(0xff47CEC7),
                                 title: Text(industry),
-                                value: provider.companyModel.company.companyIndustry.contains(industry),
+                                value: provider.companyModel.companyIndustry.contains(industry),
                                 onChanged: (value) {
                                   provider.setIndustry(value, industry) ;
                                 },
@@ -234,7 +227,7 @@ class EditProfileScreen extends StatelessWidget {
                                 color: const Color(0xb3ffffff),
                               ),
                               child: DropdownButtonFormField(
-                                value: provider.companyModel.company.companySize,
+                                value: provider.companyModel.companySize,
                                 items: const [
                                   DropdownMenuItem(
                                     value: 'Micro',

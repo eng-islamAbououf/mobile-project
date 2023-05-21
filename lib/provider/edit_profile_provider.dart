@@ -1,54 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_project/Controllers/edit_profile_controller.dart';
 import 'package:mobile_project/models/company_model_response.dart';
+import 'package:mobile_project/models/company_profile.dart';
 import 'package:mobile_project/repos/profile_services.dart';
 
 import '../repos/api_status.dart';
 
 class EditProfileProvider with ChangeNotifier{
 
-  late CompanyModelResponse _companyModel;
+  late CompanyProfile _companyModel;
   bool _loading = false;
   bool _success = false;
   String? errorMsg;
   bool get loading => _loading;
   final EditProfileController _controller = EditProfileController();
-  CompanyModelResponse get companyModel => _companyModel;
+  CompanyProfile get companyModel => _companyModel;
 
-  init(CompanyModelResponse model){
-    _companyModel = model;
-    _controller.nameController.text = _companyModel.company.companyName;
-    _controller.contactNameController.text = _companyModel.company.contactPersonName;
-    _controller.phoneNumberController.text = _companyModel.company.companyPhone;
-    _controller.emailController.text = _companyModel.company.email;
-    _controller.password.text = _companyModel.company.password??' ';
-    _controller.addressController.text = _companyModel.company.companyAddress;
+  EditProfileProvider(){
+    init();
+  }
+  init() async{
+    setLoading(true) ;
+    var response = await ProfileServices().getCompany();
+    if(response is Success) {
+      _companyModel = response.response as CompanyProfile ;
+    }
+    _controller.nameController.text = _companyModel.companyName;
+    _controller.contactNameController.text = _companyModel.contactPersonName;
+    _controller.phoneNumberController.text = _companyModel.companyPhone;
+    _controller.emailController.text = _companyModel.email;
+    _controller.password.text = "islam1234";
+    _controller.addressController.text = _companyModel.companyAddress;
+    setLoading(false);
   }
   setImage(var image) async {
-    _companyModel.company.image = image ;
+    _companyModel.image = image ;
     notifyListeners();
   }
 
   setSize(var size){
-    _companyModel.company.companySize = size;
+    _companyModel.companySize = size;
     notifyListeners();
   }
 
   setIndustry(value, industry){
     if(value) {
-      companyModel.company.companyIndustry.add(industry) ;
+      companyModel.companyIndustry.add(industry) ;
     } else {
-      if(companyModel.company.companyIndustry.length>1) {
-        companyModel.company.companyIndustry.remove(industry);
+      if(companyModel.companyIndustry.length>1) {
+        companyModel.companyIndustry.remove(industry);
       }
     }
     notifyListeners();
   }
 
   updateProfile() async {
-    companyModel.company.password = _controller.password.text;
+    if(_controller.password.text != "islam1234") {
+      companyModel.password = _controller.password.text;
+    }
     setLoading(true) ;
-    var response = await ProfileServices().updateProfile(companyModel) ;
+    var response = await ProfileServices().updateProfile(_companyModel) ;
     setLoading(false) ;
     if(response is Success){
       _success = true;

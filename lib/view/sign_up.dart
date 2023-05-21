@@ -6,6 +6,7 @@ import 'package:mobile_project/componants/custom_app_bar.dart';
 import 'package:mobile_project/componants/failure_dialog.dart';
 import 'package:mobile_project/componants/sign_up_form_field.dart';
 import 'package:mobile_project/provider/sign_up_provider.dart';
+import 'package:mobile_project/utils/constants.dart';
 import 'package:mobile_project/view/edit_profile.dart';
 import 'package:mobile_project/view/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +18,7 @@ class SignupScreen extends StatelessWidget {
   final _validator = AuthValidator();
 
   // provider
-  final List<String> _companyIndustryList = [
-    'Industry1',
-    'Industry2',
-    'Industry3',
-    'Industry4',
-  ];
+  final List<String> _companyIndustryList = INDUSTRIES ;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,7 @@ class SignupScreen extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     var provider = Provider.of<SignUpProvider>(context);
-    provider.init();
+    //provider.init();
     _controller = provider.controller;
 
     return Scaffold(

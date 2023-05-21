@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_project/models/service_item_model.dart';
 import 'package:mobile_project/provider/home_provider.dart';
@@ -6,7 +5,7 @@ import 'package:mobile_project/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class ServiceDetailsScreen extends StatelessWidget {
-  ServiceDetailsScreen({Key? key}) : super(key: key);
+  const ServiceDetailsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<HomeProvider>(context);
@@ -67,11 +66,16 @@ class ServiceDetailsScreen extends StatelessWidget {
               child: _buildRoundedCard(
                 Row(
                   children: [
-                    Image.asset("assets/images/buildings.png",
+                    model.company.image == null?Image.asset(
+                      "assets/images/buildings.png",
                       width: 70,
                       fit: BoxFit.cover,
+                    ) :
+                    CircleAvatar(
+                      radius: 35, // Adjust the radius according to your preference
+                      backgroundImage: FileImage(model.company.image!),
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

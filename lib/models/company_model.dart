@@ -22,7 +22,6 @@ class CompanyModel {
   double lat;
   List<String> companyIndustry;
   String companyName;
-  File? image;
 
   CompanyModel({
     required this.email,
@@ -35,7 +34,6 @@ class CompanyModel {
     required this.lat,
     required this.companyIndustry,
     required this.companyName,
-    this.image,
   });
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) => CompanyModel(
@@ -48,21 +46,6 @@ class CompanyModel {
     lat: double.parse(json['lat']),
     companyIndustry: (json['company_industry'] as String).split(',').map((e) => e.trim()).toList(),
     companyName: json["company_name"],
-    image: json["image"],
-  );
-
-
-  factory CompanyModel.fromCompany(Company obj) => CompanyModel(
-    email: obj.email,
-    companySize: obj.companySize,
-    companyAddress: obj.companyAddress,
-    companyPhone: obj.companyPhone,
-    contactPersonName: obj.contactPersonName,
-    long: double.parse(obj.long),
-    lat: double.parse(obj.lat),
-    companyIndustry: (obj.companyIndustry as String).split(',').map((e) => e.trim()).toList(),
-    companyName: obj.companyName,
-    image: obj.image,
   );
 
   Map<String, dynamic> toJson() => {

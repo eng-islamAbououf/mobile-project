@@ -33,12 +33,13 @@ class SignInProvider with ChangeNotifier{
   Future<void> signIn() async {
     setLoading(true) ;
     var response = await AuthServices().login(_controller.emailController.text , _controller.passwordController.text) ; ;
+
+    print(response) ;
     if(response is Success){
       CompanyModelResponse com = response.response as CompanyModelResponse;
       var box =await Hive.openBox('myBox');
       box.put('token', com.token);
       companyModel = com;
-
     }else if(response is Failure){
       setErrorMsg(response.errorResponse as String);
     }
