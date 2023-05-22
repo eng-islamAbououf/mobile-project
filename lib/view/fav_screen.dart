@@ -20,7 +20,7 @@ class FavouriteScreen extends StatelessWidget {
             provider.setIndex(SERVICE_DETAILS_PAGE);
           },
             child: ServiceItemView(
-                model: provider.services[provider.fav_services[index]]));
+                model: provider.services[provider.fav_services[index]-1]));
       },
     );
   }

@@ -35,7 +35,7 @@ class ServicesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: (){
-                  provider.setTappedIndex(index);
+                  provider.setTappedIndex(provider.filtered[index].service.id);
                   provider.setIndex(SERVICE_DETAILS_PAGE);
                 },
                   child: ServiceItemView(model: provider.filtered[index])

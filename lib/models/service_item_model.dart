@@ -4,6 +4,7 @@ import 'package:mobile_project/models/company_model.dart';
 import 'package:mobile_project/models/service_response.dart';
 
 List<ServiceItemModel> serviceItemModelFromJson(String str) => List<ServiceItemModel>.from(json.decode(str).map((x) => ServiceItemModel.fromJson(x)));
+List<Service> favServiceFromJson(String str) => List<Service>.from(json.decode(str).map((x) => Service.fromJson(x)));
 
 String serviceItemModelToJson(List<ServiceItemModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 

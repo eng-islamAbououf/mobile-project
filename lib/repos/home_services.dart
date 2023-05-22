@@ -84,6 +84,25 @@ class HomeServices{
       throw Exception('Failed to load services');
     }
   }
+  Future getAllFavServices() async {
+
+    String token = await getToken();
+    final response = await http.get(Uri.parse('$BASE/getFavList'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<Service> services = favServiceFromJson(response.body) ;
+      List<int> id = [];
+      services.forEach((element) {id.add(element.id) ;}) ;
+      return Success(code: 200, response: id);
+    } else {
+      throw Exception('Failed to load services');
+    }
+  }
 
   Future addService(title, desc) async {
     String url = '$BASE/addService/';
@@ -99,6 +118,62 @@ class HomeServices{
           'name' : title,
           'des' : desc
         }),
+      );
+      if(response.statusCode==200){
+        return Success(code: 200,
+          response: '',
+        );
+      }
+      return Failure(code: INVALID_RESPONSE, errorResponse: "Invalid Data");
+    } on HttpException{
+      return Failure(code: NO_INTERNE, errorResponse: "No Internet");
+    }on FormatException{
+      return Failure(code: INVALID_FORMAT, errorResponse: "Invalid Format");
+    }
+    catch (e) {
+      return Failure(code: UNKNOWN, errorResponse: "Unknown Error");
+    }
+  }
+
+  Future addToFavourite(favId) async {
+    String url = '$BASE/addFav/';
+    String token = await getToken() ;
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : 'Bearer $token'
+        },
+        body: jsonEncode({
+          'fav_id' : '$favId',
+        }),
+      );
+      if(response.statusCode==200){
+        return Success(code: 200,
+          response: '',
+        );
+      }
+      return Failure(code: INVALID_RESPONSE, errorResponse: "Invalid Data");
+    } on HttpException{
+      return Failure(code: NO_INTERNE, errorResponse: "No Internet");
+    }on FormatException{
+      return Failure(code: INVALID_FORMAT, errorResponse: "Invalid Format");
+    }
+    catch (e) {
+      return Failure(code: UNKNOWN, errorResponse: "Unknown Error");
+    }
+  }
+  Future removeFromFavourite(favId) async {
+    String url = '$BASE/removeFav/${favId}';
+    String token = await getToken() ;
+    try {
+      final http.Response response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : 'Bearer $token'
+        },
       );
       if(response.statusCode==200){
         return Success(code: 200,
